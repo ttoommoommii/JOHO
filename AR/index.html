@@ -77,15 +77,36 @@
         device-orientation-permission-ui="enabled: false"
         vr-mode-ui="enabled: false">
         <a-assets>
-            <img id="img"src="./img/bom.png" />
+            <img id="img"src="img/bom.png" />
             <a-asset-item id = "bu" src = "img/bubu.glb"> </a-asset-item >
-            
+            <a-asset-item id = "ufo" src = "img/cosmo.glb"> </a-asset-item >
+            //<a-asset-item id = "chu" src = "img/cyucyu.glb"> </a-asset-item >
+            //<a-asset-item id = "tths" src = "img/heiko.glb"> </a-asset-item >
+            //<a-asset-item id = "hou" src = "img/houhou.glb"> </a-asset-item >
+            //<a-asset-item id = "kon" src = "img/konkon.glb"> </a-asset-item >
+            //<a-asset-item id = "gao" src = "img/lion.glb"> </a-asset-item >
+            //<a-asset-item id = "pen" src = "img/penpen.glb"> </a-asset-item >
+            //<a-asset-item id = "pyon" src = "img/pyonpyon.glb"> </a-asset-item >
+            //<a-asset-item id = "sui" src = "img/suisui.glb"> </a-asset-item >
+            //<a-asset-item id = "piyo" src = "img/piyopiyo.glb"> </a-asset-item >
+            //<a-asset-item id = "kojika" src = "img/kojika.glb"> </a-asset-item >
+            //<a-asset-item id = "koneko" src = "img/koneko.glb"> </a-asset-item >
+            //<a-asset-item id = "koinu" src = "img/koinu.glb"> </a-asset-item >
+            //<a-asset-item id = "korisu" src = "img/korisu.glb"> </a-asset-item >
+            //<a-asset-item id = "kousagi" src = "img/kousagi.glb"> </a-asset-item >
+            //<a-asset-item id = "kohituji" src = "img/kohituji.glb"> </a-asset-item >
+            //<a-asset-item id = "kosukanku" src = "img/kosukanku.glb"> </a-asset-item >
+            //<a-asset-item id = "hone" src = "img/hone.glb"> </a-asset-item >    
         </a-assets>
         <a-marker marker type='pattern' url='pattern/bu.patt'>
           <a-gltf-model src="#bu" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
             </a-image>
         </a-marker>
-        
+        <a-marker marker2 type='pattern' url='pattern/ufo.patt'>
+          <a-gltf-model src="#ufo" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+
         <a-entity camera></a-entity>       
      </a-scene>
 
