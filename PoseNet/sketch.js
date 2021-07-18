@@ -63,13 +63,6 @@ let debug = false;
 let swf = false;
 let mon = false;
 
-//
-var serial;          // variable to hold an instance of the serialport library
-var portName = 'COM3';//'/dev/cu.usbserial-DN01DW79';  // fill in your serial port name here
-var inData;   // variable to hold the input data from Arduino
-var outData = 0;  // variable to hold the output data to Arduino
-let menu;//
-
 // 音声や画像ファイルの読み込み
 function preload() {
         soundS = loadSound("img/s.mp3");
@@ -82,6 +75,27 @@ function preload() {
         img_On=loadImage("img/button_off.png");
         img_Off=loadImage("img/button_on.png")
 }
+//COM
+let port;
+  
+        async function onStartButtonClick() {
+          try {
+            port = await navigator.serial.requestPort();
+            await port.open({ baudRate: 115200 });
+            console.log("接続");
+          } catch (e) {
+            console.log("Error");
+          }
+        }
+  
+        async function writeText(text) {
+          const encoder = new TextEncoder();
+          const writer = port.writable.getWriter();
+          await writer.write(encoder.encode(text));
+          console.log("テキスト書き込み: " + text);
+          writer.releaseLock();
+        }
+//-COM
 
 // ページを開いたときに一度だけ実行する処理
 function setup() {
@@ -92,27 +106,40 @@ function setup() {
         poseNet.on('pose', gotPoses);
         angleMode(DEGREES);
 
-        posTitle = createP('[骨格を予測することができます。ジェスチャーでOn/Offも!!]');
+        posTitle = createP('[骨格を予測します。ジェスチャーでOn/Offも!!]　↓押さない、外部機器制御用ボタン');
         checkbox2 = createCheckbox('骨格表示', false);
         checkbox2.changed(toggleDebug);
-        posiP = createP('');
         checkbox3 = createCheckbox('コスプレ', false);
         checkbox3.changed(toggleMon);
         checkbox1 = createCheckbox('スイッチ', false);
         checkbox1.changed(toggleSw);
+        posiP = createP('');    //デバックチェックを押した時に座標が表示される場所
 
-        //set up communication port
-        serial = new p5.SerialPort();       // make a new instance of the serialport library
-        serial.list();//リストから選択するよ
-        serial.on('list', printList);  // set a callback function for the serialport list event
-        serial.on('connected', serverConnected); // callback for connecting to the server
-        serial.on('open', portOpen);        // callback for the port opening
-        serial.on('data', serialEvent);     // callback for when new data arrives
-        serial.on('error', serialError);    // callback for errors
-        serial.on('close', portClose);      // callback for the port closing
-        //serial.list();                      // list the serial ports
-        serial.open(portName);              // open a serial port
+        //com
+        comButton = createButton("接続開始");
+        comButton.mousePressed(function() {
+                onStartButtonClick();
+                console.log("comButton");
+        });
+        comButton.size(80,30);
+        comButton.position(450, 550);
+
+        OnButton = createButton("On");
+        OnButton.mousePressed(function() {
+                writeText('401\n');
+                console.log("On");
+        });
+        OnButton.size(80,30);
+        OnButton.position(450, 590);
         
+        OffButton = createButton("Off");
+        OffButton.mousePressed(function() {
+                writeText('400\n');
+                console.log("Off");
+        });
+        OffButton.size(80,30);
+        OffButton.position(560, 590);
+        //com
 }
 
 // 定期的に繰り返し実行される処理
@@ -142,16 +169,12 @@ function draw() {
                 if(img_LedF==0 && rightHandX<img_OnX+20 && rightHandX>img_OnX-20 && rightHandY<img_OnY){
                         img_LedF=1;
                         soundS.play();
-                        outData = 255 + "\r\n";
-                        serial.write(outData);
-                        print('outData->%d',outData);        
+                        writeText('401\n');
                 }
                 if(img_LedF==1 && leftHandX<img_OffX+20 && leftHandX>img_OffX-20 && leftHandY<img_OffY){
                         img_LedF=0;
                         soundE.play();
-                        outData = 0 + "\r\n";
-                        serial.write(outData);
-                        print('outData->%d',outData); 
+                        writeText('400\n');
                 }
                 if(img_LedF==0){
                         image(img_LedWhite,img_LedX,img_LedY,80,120);
@@ -189,11 +212,7 @@ function draw() {
                 posiP.html('　ハンドポジション LX:' + int(leftHandX) + ' LY:' + int(leftHandY) + ' RX:' + int(rightHandX) + ' RY:' + int(rightHandY));
         }else{
                 posiP.html('');
-        }
-        
-
-       
-        
+        }        
 }
 
 // PoseNetモデルの読み込みが完了したときに呼ばれるコールバック関数
@@ -295,47 +314,5 @@ function toggleMon() {
         } else {
                 mon = false;
         }
-}
-
-// Following functions print the serial communication status to the console for debugging purposes
-/*function printList(portList) {
-        // portList is an array of serial port names
-        for (var i = 0; i < portList.length; i++) {
-        // Display the list the console:
-        print(i + " " + portList[i]);
-        }
-} */
-function serverConnected() {
-        print('connected to server.');
-}      
-function portOpen() {
-        print('the serial port opened.')
-}       
-function serialEvent() {
-        inData = Number(serial.read());
-}       
-function serialError(err) {
-        print('Something went wrong with the serial port. ' + err);
-}       
-function portClose() {
-        print('The serial port closed.');
-}
-// Got the list of ports
-function printList(serialList) {
-        menu = createSelect();
-        let title = createElement('option', 'Port選択:');
-        menu.child(title);
-        menu.position(550, 500);
-        menu.changed(openPort);
-        for (let i = 0; i < serialList.length; i++) {
-          let thisOption = createElement('option', serialList[i]);
-          thisOption.value = serialList[i];
-          menu.child(thisOption);
-          print(i + " " + serialList[i]);
-        }
-}
-function openPort() {
-        portName = menu.elt.value;
-        serial.open(portName);
 }
        
