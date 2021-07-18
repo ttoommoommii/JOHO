@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-      
+
    <script language="javascript" type="text/javascript">
     var music = new Audio();
     var music2 = new Audio();
@@ -71,36 +71,8 @@
         });
       }
     });
-        const button01 = document.getElementById("write01");
-        const button02 = document.getElementById("write02");
-        const button03 = document.getElementById("write03");
-        const button04 = document.getElementById("write04");
-        //button01.addEventListener("click", function () {writeText('L255255255\n');}, false);
-        //button02.addEventListener("click", function () {writeText('L000000000\n');}, false);
-        button01.addEventListener("click", function () {writeText('201\n');}, false);
-        button02.addEventListener("click", function () {writeText('200\n');}, false);
-        button03.addEventListener("click", function () {writeText('401\n');}, false);
-        button04.addEventListener("click", function () {writeText('400\n');}, false);
-        
-        let port;
-  
-        async function onStartButtonClick() {
-          try {
-            port = await navigator.serial.requestPort();
-            await port.open({ baudRate: 115200 });
-            console.log("接続");
-          } catch (e) {
-            console.log("Error");
-          }
-        }
-  
-        async function writeText(text) {
-          const encoder = new TextEncoder();
-          const writer = port.writable.getWriter();
-          await writer.write(encoder.encode(text));
-          console.log("テキスト書き込み: " + text);
-          writer.releaseLock();
-        }
+
+       
   </script>
 
      <a-scene
@@ -223,7 +195,36 @@
       </div>
 
       <script>
-       
+        const button01 = document.getElementById("write01");
+        const button02 = document.getElementById("write02");
+        const button03 = document.getElementById("write03");
+        const button04 = document.getElementById("write04");
+        //button01.addEventListener("click", function () {writeText('L255255255\n');}, false);
+        //button02.addEventListener("click", function () {writeText('L000000000\n');}, false);
+        button01.addEventListener("click", function () {writeText('201\n');}, false);
+        button02.addEventListener("click", function () {writeText('200\n');}, false);
+        button03.addEventListener("click", function () {writeText('401\n');}, false);
+        button04.addEventListener("click", function () {writeText('400\n');}, false);
+        
+        let port;
+  
+        async function onStartButtonClick() {
+          try {
+            port = await navigator.serial.requestPort();
+            await port.open({ baudRate: 115200 });
+            console.log("接続");
+          } catch (e) {
+            console.log("Error");
+          }
+        }
+  
+        async function writeText(text) {
+          const encoder = new TextEncoder();
+          const writer = port.writable.getWriter();
+          await writer.write(encoder.encode(text));
+          console.log("テキスト書き込み: " + text);
+          writer.releaseLock();
+        }
       </script>
 </body>
 </html>
