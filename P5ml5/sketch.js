@@ -21,9 +21,8 @@ function setup() {
     video = createCapture(VIDEO);
     video.hide();
     // Initialize the Image Classifier method with MobileNet and the video as the second argument
-    classifier = ml5.imageClassifier('MobileNet', video, modelReady);
-    
-    resultsP = createP('Loading model and video...');
+    classifier = ml5.imageClassifier('MobileNet', video, modelReady); 
+    //resultsP = createP('Loading model and video...');
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
