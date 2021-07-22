@@ -63,12 +63,6 @@ let debug = false;
 let swf = false;
 let mon = false;
 
-let h;
-let www=640;
-
-let ww;
-let hh;
-
 // 音声や画像ファイルの読み込み
 function preload() {
         soundS = loadSound("img/s.mp3");
@@ -103,51 +97,24 @@ let port;
         }
 //-COM
 
-
-function windowResized() {
-        //resizeCanvas(windowWidth,windowHeight-200*www);
-        resizeCanvas(video.width*www,video.height*www);
-        
-        //comButton.position(450, windowHeight-120);
-        //OnButton.position(560, windowHeight-120);
-        //OffButton.position(560, windowHeight-90);
-        comButton.position(video.width*www-250, video.height*www+90);
-        OnButton.position(video.width*www-150, video.height*www+90);
-        OffButton.position(video.width*www-150, video.height*www+120);
-}
 // ページを開いたときに一度だけ実行する処理
 function setup() {
-        createCanvas(windowWidth-10,windowHeight-200);
+        createCanvas(640, 480);
         video = createCapture(VIDEO);
         video.hide();
         let poseNet = ml5.poseNet(video, modelLoaded);
         poseNet.on('pose', gotPoses);
         angleMode(DEGREES);
 
-        posTitle = createP('[骨格を予測します。スイッチOn/Offも!!]');
-        checkbox2 = createCheckbox('←➀骨格表示', false);
+        posTitle = createP('[骨格を予測します。ジェスチャーでOn/Offも!!]　↓押さない、外部機器制御用ボタン');
+        checkbox2 = createCheckbox('骨格表示', false);
         checkbox2.changed(toggleDebug);
-        checkbox3 = createCheckbox('←➁コスプレ', false);
+        checkbox3 = createCheckbox('コスプレ', false);
         checkbox3.changed(toggleMon);
-        checkbox1 = createCheckbox('←➂スイッチ', false);
+        checkbox1 = createCheckbox('スイッチ', false);
         checkbox1.changed(toggleSw);
         posiP = createP('');    //デバックチェックを押した時に座標が表示される場所
 
-        //
-        if(windowHeight > video.height) h=video.height;
-        else h=windowHeight;
-        if(windowWidth < windowHeight){
-            ww=windowWidth;hh=windowHeight;
-        }else{
-            ww=windowHeight;hh=windowWidth;
-        }
-        www=ww/video.width;
-        resizeCanvas(video.width*www,video.height*www+50*www);
-        translate(width,0);
-        scale(-ww/(video.width-0),ww/(video.width-0));
-        image(video, 0,0);
-        video.hide();
-        //
         //com
         comButton = createButton("接続開始");
         comButton.mousePressed(function() {
@@ -155,9 +122,7 @@ function setup() {
                 console.log("comButton");
         });
         comButton.size(80,30);
-        //comButton.position(450, windowHeight-120);
-        comButton.position(video.width*www-250, video.height*www+70*www);
-       
+        comButton.position(450, 550);
 
         OnButton = createButton("On");
         OnButton.mousePressed(function() {
@@ -165,9 +130,7 @@ function setup() {
                 console.log("On");
         });
         OnButton.size(80,30);
-        //OnButton.position(560, windowHeight-120);
-        OnButton.position(video.width*www-150, video.height*www+70*www);
-        
+        OnButton.position(450, 590);
         
         OffButton = createButton("Off");
         OffButton.mousePressed(function() {
@@ -175,25 +138,12 @@ function setup() {
                 console.log("Off");
         });
         OffButton.size(80,30);
-        //OffButton.position(560, windowHeight-90);
-        OffButton.position(video.width*www-150, video.height*www+85*www);
+        OffButton.position(560, 590);
         //com
 }
 
 // 定期的に繰り返し実行される処理
 function draw() {
-        if(windowHeight > video.height) h=video.height;
-        else h=windowHeight;
-        //if(windowWidth>video.width) www=video.width;
-        //else www=windowWidth;
-        
-        if(windowWidth < windowHeight){
-            ww=windowWidth;hh=windowHeight;
-        }else{
-            ww=windowHeight;hh=windowWidth;
-        }
-
-  
         let arm_ratio = 1.8;
         let leftHandX = leftElbowX + (leftWristX - leftElbowX) * arm_ratio;
         let leftHandY = leftElbowY + (leftWristY - leftElbowY) * arm_ratio;
@@ -203,9 +153,8 @@ function draw() {
         
         //push(); //ここから反転
         translate(width,0);
-        www=ww/video.width;
-        scale(-www,www);
-        image(video, 0,0);
+        scale(-1.0,1.0);
+        image(video, 0, 0);
         //pop();
         
         if(swf){
@@ -213,9 +162,10 @@ function draw() {
                 translate(width,0);
                 scale(-1.0, 1.0);   //左右反転
                 imageMode(CENTER);
-                image(img_Off,video.width*www-img_OnX,img_OnY,100,100);
-                image(img_On,video.width*www-img_OffX,img_OffY,100,100);
+                image(img_On,img_OnX,img_OnY,100,100);
+                image(img_Off,img_OffX,img_OffY,100,100);
                 pop();
+        
                 if(img_LedF==0 && rightHandX<img_OnX+20 && rightHandX>img_OnX-20 && rightHandY<img_OnY){
                         img_LedF=1;
                         soundS.play();
@@ -262,9 +212,7 @@ function draw() {
                 posiP.html('　ハンドポジション LX:' + int(leftHandX) + ' LY:' + int(leftHandY) + ' RX:' + int(rightHandX) + ' RY:' + int(rightHandY));
         }else{
                 posiP.html('');
-        }
-        
-        //scale(0.1,0.1);        
+        }        
 }
 
 // PoseNetモデルの読み込みが完了したときに呼ばれるコールバック関数
