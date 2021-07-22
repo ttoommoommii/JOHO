@@ -155,8 +155,8 @@ function setup() {
                 console.log("comButton");
         });
         comButton.size(50,30);
-        //comButton.position(450, windowHeight-120);
-        comButton.position(video.width*www-250, video.height+500);
+        comButton.position(450, windowHeight-120);
+        //comButton.position(video.width*www-250, video.height+500);
        
 
         OnButton = createButton("On");
@@ -165,8 +165,8 @@ function setup() {
                 console.log("On");
         });
         OnButton.size(50,30);
-        //OnButton.position(560, windowHeight-120);
-        OnButton.position(video.width*www-150, video.height+500);
+        OnButton.position(560, windowHeight-120);
+        //OnButton.position(video.width*www-150, video.height+500);
         
         
         OffButton = createButton("Off");
@@ -175,8 +175,8 @@ function setup() {
                 console.log("Off");
         });
         OffButton.size(50,30);
-        //OffButton.position(560, windowHeight-90);
-        OffButton.position(video.width*www-150, video.height+540);
+        OffButton.position(560, windowHeight-90);
+        //OffButton.position(video.width*www-150, video.height+540);
         //com
 }
 
