@@ -47,10 +47,10 @@ let img_LedX=10;
 let img_LedY=200;
 let img_On;
 let img_Off;
-let img_OnX=100;
+let img_OnX=80;
 let img_OnY=100;
 let img_OffX=200;
-let img_OffY=100;
+let img_OffY=80;
 let img_LedF=0;
 let img_LedWhite;
 
