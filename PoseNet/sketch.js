@@ -143,20 +143,20 @@ function setup() {
         }
         www=ww/video.width;
         resizeCanvas(video.width*www,video.height*www+50*www);
-        translate(width,0);
+        //translate(width,0);
         scale(-ww/(video.width-0),ww/(video.width-0));
-        image(video, 0,0);
-        video.hide();
+        //image(video, 0,0);
+        //video.hide();
         //
         //com
-        comButton = createButton("接続開始");
+        comButton = createButton("接続");
         comButton.mousePressed(function() {
                 onStartButtonClick();
                 console.log("comButton");
         });
-        comButton.size(80,30);
+        comButton.size(50,30);
         //comButton.position(450, windowHeight-120);
-        comButton.position(video.width*www-250, video.height*www+70*www);
+        comButton.position(video.width*www-250, video.height+500);
        
 
         OnButton = createButton("On");
@@ -164,9 +164,9 @@ function setup() {
                 writeText('401\n');
                 console.log("On");
         });
-        OnButton.size(80,30);
+        OnButton.size(50,30);
         //OnButton.position(560, windowHeight-120);
-        OnButton.position(video.width*www-150, video.height*www+70*www);
+        OnButton.position(video.width*www-150, video.height+500);
         
         
         OffButton = createButton("Off");
@@ -174,9 +174,9 @@ function setup() {
                 writeText('400\n');
                 console.log("Off");
         });
-        OffButton.size(80,30);
+        OffButton.size(50,30);
         //OffButton.position(560, windowHeight-90);
-        OffButton.position(video.width*www-150, video.height*www+85*www);
+        OffButton.position(video.width*www-150, video.height+540);
         //com
 }
 
